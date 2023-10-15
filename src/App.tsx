@@ -1,35 +1,89 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import { MouseEvent, useEffect, useState } from 'react';
+import { ALL_CAUSES } from './data/causes';
 
-function App() {
-  const [count, setCount] = useState(0);
+const { VITE_API_KEY } = import.meta.env;
+
+interface NonProfit {
+  slug: string;
+  name: string;
+  location: string;
+  description: string;
+  profileUrl: string;
+  logoUrl: string;
+  coverImageUrl: string;
+  tags?: string[];
+}
+
+const App = () => {
+  const [keyword, setKeyword] = useState('');
+  const [nonProfits, setNonProfits] = useState<NonProfit[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  async function searchByKeyword(cause: string) {
+    const res = await fetch(
+      `https://partners.every.org/v0.2/search/${cause}?apiKey=${VITE_API_KEY}`,
+    );
+    return res.json();
+  }
+
+  const handleInput = (event: MouseEvent<HTMLInputElement>) => {
+    const { value } = event.target as HTMLInputElement;
+    setKeyword(value);
+  };
+
+  useEffect(() => {
+    const index = Math.floor(Math.random() * ALL_CAUSES.length);
+    const cause = ALL_CAUSES[index];
+    setIsLoading(true);
+
+    searchByKeyword(cause)
+      .then((result) => {
+        setErrorMessage('');
+        setNonProfits(result.nonprofits as NonProfit[]);
+      })
+      .catch((err) => setErrorMessage(err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   return (
-    <>
+    <div>
+      <h1>Charity Finder</h1>
+
+      <input
+        type="text"
+        placeholder="Input a cause here"
+        onInput={handleInput}
+      />
+
+      <p>{keyword}</p>
+
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        {isLoading
+          ? 'Loading...'
+          : errorMessage ||
+            nonProfits.map((nonProfit) => (
+              <a key={nonProfit.slug} href={nonProfit.profileUrl}>
+                <div>
+                  <h2>
+                    <img src={nonProfit.logoUrl} alt={nonProfit.name} />
+                    <span>{nonProfit.name}</span>
+                  </h2>
+
+                  <p>{nonProfit.location}</p>
+
+                  <p>{nonProfit.description}</p>
+
+                  <ul>
+                    {nonProfit.tags &&
+                      nonProfit.tags.map((tag) => <li key={tag}>{tag}</li>)}
+                  </ul>
+                </div>
+              </a>
+            ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   );
-}
+};
 
 export default App;
