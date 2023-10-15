@@ -62,38 +62,38 @@ const App = () => {
         {isLoading
           ? 'Loading...'
           : errorMessage ||
-            nonProfits.map((nonProfit) => (
-              <div key={nonProfit.slug}>
-                <a href={nonProfit.profileUrl}>
-                  <h2>
-                    <img src={nonProfit.logoUrl} alt={nonProfit.name} />
-                    <span>{nonProfit.name}</span>
-                  </h2>
+          nonProfits.map((nonProfit) => (
+            <div key={nonProfit.slug}>
+              <a href={nonProfit.profileUrl}>
+                <h2>
+                  <img src={nonProfit.logoUrl ?? '/vite.svg'} alt={nonProfit.name} />
+                  <span>{nonProfit.name}</span>
+                </h2>
+              </a>
+
+              <p>
+                Location:{' '}
+                <a
+                  href={`https://www.google.com/maps/search/${(
+                    nonProfit.location ?? ''
+                  ).replace(/\s/g, '+')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {nonProfit.location}
                 </a>
+              </p>
 
-                <p>
-                  Location:{' '}
-                  <a
-                    href={`https://www.google.com/maps/search/${(
-                      nonProfit.location ?? ''
-                    ).replace(/\s/g, '+')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {nonProfit.location}
-                  </a>
-                </p>
+              <p>{nonProfit.description}</p>
 
-                <p>{nonProfit.description}</p>
-
-                <ul>
-                  {nonProfit.tags &&
-                    nonProfit.tags.map((tag) => (
-                      <li key={`${nonProfit.slug}-${tag}`}>{tag}</li>
-                    ))}
-                </ul>
-              </div>
-            ))}
+              <ul>
+                {nonProfit.tags &&
+                  nonProfit.tags.map((tag) => (
+                    <li key={`${nonProfit.slug}-${tag}`}>{tag}</li>
+                  ))}
+              </ul>
+            </div>
+          ))}
       </div>
     </div>
   );
