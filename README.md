@@ -1,6 +1,6 @@
 # Charity Finder
 
-This website allows users to search for the non-profit organizations based on causes. It has a simplistic UI with the basic search features. It is built with React, TypeScript, and Vite.
+This website allows users to search for the non-profit organizations based on causes. It has a simplistic UI with the basic search features. It is built with React, TypeScript, and Vite. A live demo can be previewed [here](https://charity-finder-louvrecly.vercel.app/).
 
 ## Features
 
