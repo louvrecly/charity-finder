@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CharityDetails } from '../models/Charity';
 import { Tag, TagDetails } from '../models/Tag';
-import TagsList from '../components/TagsList';
+import ProfileTitle from '../components/ProfileTitle';
 import LocationBlock from '../components/LocationBlock';
+import TagsList from '../components/TagsList';
 
 const { VITE_API_KEY } = import.meta.env;
 
@@ -61,15 +62,7 @@ const CharityProfile = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <div>
-                  <img
-                    src={
-                      charity.logoUrl ?? 'https://every.org/favicon-32x32.png'
-                    }
-                    alt={charity.name}
-                  />
-                  <h2>{charity.name}</h2>
-                </div>
+                <ProfileTitle name={charity.name} logoUrl={charity.logoUrl} />
               </a>
 
               <LocationBlock
