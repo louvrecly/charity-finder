@@ -1,10 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CharityOverview } from '../models/Charity';
+import { SearchResponse } from '../models/EveryOrgResponse';
 import CharitiesList from '../components/CharitiesList';
 import { Cause } from '../data/causes';
 
-const { VITE_API_KEY } = import.meta.env;
+const { VITE_EVERY_ORG_API, VITE_API_KEY } = import.meta.env;
 
 interface HomeProps {
   causes: Cause[];
@@ -17,13 +18,6 @@ const Home = ({ causes = [] }: HomeProps) => {
   const [charities, setCharities] = useState<CharityOverview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  async function getCharitiesByCause(cause: Cause) {
-    const res = await fetch(
-      `https://partners.every.org/v0.2/search/${cause}?apiKey=${VITE_API_KEY}`,
-    );
-    return res.json();
-  }
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target as HTMLInputElement;
@@ -57,10 +51,12 @@ const Home = ({ causes = [] }: HomeProps) => {
 
     setIsLoading(true);
     setKeyword(cause);
-    getCharitiesByCause(cause)
-      .then((response) => {
+
+    fetch(`${VITE_EVERY_ORG_API}/search/${cause}?apiKey=${VITE_API_KEY}`)
+      .then((res) => res.json())
+      .then((response: SearchResponse) => {
         setErrorMessage('');
-        setCharities((response.nonprofits as CharityOverview[]) ?? []);
+        setCharities(response.nonprofits);
       })
       .catch((err) => setErrorMessage(err.message))
       .finally(() => setIsLoading(false));

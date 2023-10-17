@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CharityDetails } from '../models/Charity';
 import { Tag, TagDetails } from '../models/Tag';
+import { GetResponse } from '../models/EveryOrgResponse';
 import ProfileTitle from '../components/ProfileTitle';
 import LocationBlock from '../components/LocationBlock';
 import TagsList from '../components/TagsList';
 
-const { VITE_API_KEY } = import.meta.env;
+const { VITE_EVERY_ORG_API, VITE_API_KEY } = import.meta.env;
 
 type CharityProfileParams = {
   charitySlug?: string;
@@ -19,25 +20,21 @@ const CharityProfile = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const { charitySlug } = useParams<CharityProfileParams>();
 
-  async function getCharityBySlug(slug: string) {
-    const res = await fetch(
-      `https://partners.every.org/v0.2/nonprofit/${slug}?apiKey=${VITE_API_KEY}`,
-    );
-    return res.json();
-  }
-
   useEffect(() => {
     if (!charitySlug) return;
 
     setIsLoading(true);
 
-    getCharityBySlug(charitySlug)
-      .then((response) => {
+    fetch(
+      `${VITE_EVERY_ORG_API}/nonprofit/${charitySlug}?apiKey=${VITE_API_KEY}`,
+    )
+      .then((res) => res.json())
+      .then((response: GetResponse) => {
         const { data, message } = response;
-        if (!data) return setErrorMessage(message);
+        if (!data) return setErrorMessage(message ?? 'Data fetch error');
 
         setErrorMessage('');
-        setCharity(data.nonprofit as CharityDetails);
+        setCharity(data.nonprofit);
 
         setTags(
           data.nonprofitTags?.map((tag: TagDetails) => tag.tagName) || [],
