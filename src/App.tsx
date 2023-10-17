@@ -3,7 +3,7 @@ import { ALL_CAUSES } from './data/causes';
 
 const { VITE_API_KEY } = import.meta.env;
 
-interface NonProfit {
+interface Charity {
   slug: string;
   name: string;
   location?: string;
@@ -16,7 +16,7 @@ interface NonProfit {
 
 const App = () => {
   const [keyword, setKeyword] = useState('');
-  const [nonProfits, setNonProfits] = useState<NonProfit[]>([]);
+  const [charities, setCharities] = useState<Charity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -40,7 +40,7 @@ const App = () => {
     searchByKeyword(cause)
       .then((result) => {
         setErrorMessage('');
-        setNonProfits(result.nonprofits as NonProfit[]);
+        setCharities(result.Charities as Charity[]);
       })
       .catch((err) => setErrorMessage(err))
       .finally(() => setIsLoading(false));
@@ -62,12 +62,12 @@ const App = () => {
         {isLoading
           ? 'Loading...'
           : errorMessage ||
-          nonProfits.map((nonProfit) => (
-            <div key={nonProfit.slug}>
-              <a href={nonProfit.profileUrl}>
+          charities.map((charity) => (
+            <div key={charity.slug}>
+              <a href={charity.profileUrl}>
                 <h2>
-                  <img src={nonProfit.logoUrl ?? '/vite.svg'} alt={nonProfit.name} />
-                  <span>{nonProfit.name}</span>
+                  <img src={charity.logoUrl ?? 'https://every.org/favicon-32x32.png'} alt={charity.name} />
+                  <span>{charity.name}</span>
                 </h2>
               </a>
 
@@ -75,21 +75,21 @@ const App = () => {
                 Location:{' '}
                 <a
                   href={`https://www.google.com/maps/search/${(
-                    nonProfit.location ?? ''
+                    charity.location ?? ''
                   ).replace(/\s/g, '+')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {nonProfit.location}
+                  {charity.location}
                 </a>
               </p>
 
-              <p>{nonProfit.description}</p>
+              <p>{charity.description}</p>
 
               <ul>
-                {nonProfit.tags &&
-                  nonProfit.tags.map((tag) => (
-                    <li key={`${nonProfit.slug}-${tag}`}>{tag}</li>
+                {charity.tags &&
+                  charity.tags.map((tag) => (
+                    <li key={`${charity.slug}-${tag}`}>{tag}</li>
                   ))}
               </ul>
             </div>
