@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { CharityDetails } from '../models/Charity';
 import { Tag, TagDetails } from '../models/Tag';
+import TagsList from '../components/TagsList';
 
 const { VITE_API_KEY } = import.meta.env;
 
@@ -73,15 +74,7 @@ const CharityProfile = () => {
 
               <p>{charity.descriptionLong || charity.description}</p>
 
-              {!!tags.length && (
-                <ul>
-                  {tags.map((tag) => (
-                    <li key={tag}>
-                      <Link to={`/?cause=${tag}`}>{tag}</Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <TagsList tags={tags} />
             </div>
           ))}
     </div>
