@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { CharityDetails } from '../models/Charity';
 import { Tag, TagDetails } from '../models/Tag';
 import TagsList from '../components/TagsList';
+import LocationBlock from '../components/LocationBlock';
 
 const { VITE_API_KEY } = import.meta.env;
 
@@ -36,6 +37,7 @@ const CharityProfile = () => {
 
         setErrorMessage('');
         setCharity(data.nonprofit as CharityDetails);
+        console.log(data.nonprofit);
 
         setTags(
           data.nonprofitTags?.map((tag: TagDetails) => tag.tagName) || [],
@@ -70,7 +72,10 @@ const CharityProfile = () => {
                 </div>
               </a>
 
-              <div>{charity.locationAddress}</div>
+              <LocationBlock
+                location={charity.locationAddress}
+                coordinates={charity.locationLatLng?.coordinates}
+              />
 
               <p>{charity.descriptionLong || charity.description}</p>
 

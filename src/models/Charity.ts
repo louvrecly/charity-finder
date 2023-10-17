@@ -8,7 +8,7 @@ interface Charity {
 
 export interface CharityOverview extends Charity {
   slug: string;
-  location?: string;
+  location: string;
   tags?: string[];
 }
 

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CharityOverview } from '../models/Charity';
 import TagsList from './TagsList';
+import LocationBlock from './LocationBlock';
 
 interface CharityTileProps {
   charity: CharityOverview;
@@ -18,18 +19,7 @@ const CharityTile = ({ charity }: CharityTileProps) => (
       </h2>
     </Link>
 
-    <p>
-      Location:{' '}
-      <a
-        href={`https://www.google.com/maps/search/${(
-          charity.location ?? ''
-        ).replace(/\s/g, '+')}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {charity.location}
-      </a>
-    </p>
+    <LocationBlock location={charity.location} />
 
     <p>{charity.description}</p>
 
