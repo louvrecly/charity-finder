@@ -40,7 +40,7 @@ const App = () => {
     searchByKeyword(cause)
       .then((result) => {
         setErrorMessage('');
-        setCharities(result.Charities as Charity[]);
+        setCharities(result.nonprofits as Charity[]);
       })
       .catch((err) => setErrorMessage(err))
       .finally(() => setIsLoading(false));
