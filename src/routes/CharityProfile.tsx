@@ -38,7 +38,6 @@ const CharityProfile = () => {
 
         setErrorMessage('');
         setCharity(data.nonprofit as CharityDetails);
-        console.log(data.nonprofit);
 
         setTags(
           data.nonprofitTags?.map((tag: TagDetails) => tag.tagName) || [],
