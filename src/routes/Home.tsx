@@ -58,9 +58,9 @@ const Home = ({ causes = [] }: HomeProps) => {
     setIsLoading(true);
     setKeyword(cause);
     getCharitiesByCause(cause)
-      .then((result) => {
+      .then((response) => {
         setErrorMessage('');
-        setCharities((result.nonprofits as CharityOverview[]) ?? []);
+        setCharities((response.nonprofits as CharityOverview[]) ?? []);
       })
       .catch((err) => setErrorMessage(err.message))
       .finally(() => setIsLoading(false));
@@ -88,7 +88,7 @@ const Home = ({ causes = [] }: HomeProps) => {
             (charities.length ? (
               <CharitiesList charities={charities} />
             ) : (
-              'No matching results found'
+              'No matching responses found'
             ))}
       </div>
     </div>

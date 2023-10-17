@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { CharityDetails } from '../models/Charity';
+import { Tag, TagDetails } from '../models/Tag';
 
 const { VITE_API_KEY } = import.meta.env;
 
@@ -10,6 +11,7 @@ type CharityProfileParams = {
 
 const CharityProfile = () => {
   const [charity, setCharity] = useState<CharityDetails | null>(null);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const { charitySlug } = useParams<CharityProfileParams>();
@@ -27,18 +29,21 @@ const CharityProfile = () => {
     setIsLoading(true);
 
     getCharityBySlug(charitySlug)
-      .then((result) => {
-        const { data, message } = result;
+      .then((response) => {
+        const { data, message } = response;
         if (!data) return setErrorMessage(message);
 
         setErrorMessage('');
         setCharity(data.nonprofit as CharityDetails);
+
+        setTags(
+          data.nonprofitTags?.map((tag: TagDetails) => tag.tagName) || [],
+        );
       })
       .catch((err) => setErrorMessage(err.message))
       .finally(() => setIsLoading(false));
   }, [charitySlug]);
 
-  console.log({ charitySlug });
   return (
     <div>
       {isLoading
@@ -46,20 +51,37 @@ const CharityProfile = () => {
         : errorMessage ||
           (charity && (
             <div>
+              <img src={charity.coverImageUrl} alt={charity.name} />
+
               <a
                 href={charity.websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <div>
-                  <img src={charity.logoUrl} alt={charity.name} />
+                  <img
+                    src={
+                      charity.logoUrl ?? 'https://every.org/favicon-32x32.png'
+                    }
+                    alt={charity.name}
+                  />
                   <h2>{charity.name}</h2>
                 </div>
               </a>
 
               <div>{charity.locationAddress}</div>
 
-              <p>{charity.descriptionLong}</p>
+              <p>{charity.descriptionLong || charity.description}</p>
+
+              {!!tags.length && (
+                <ul>
+                  {tags.map((tag) => (
+                    <li key={tag}>
+                      <Link to={`/?cause=${tag}`}>{tag}</Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
     </div>
