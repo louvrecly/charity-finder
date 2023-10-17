@@ -1,23 +1,21 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Home from './routes/Home';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import Home from './routes/Home';
+import CharityProfile from './routes/CharityProfile';
 import { ALL_CAUSES } from './data/causes';
 
 const causes = [...ALL_CAUSES];
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home causes={causes} />,
-  }
-]);
-
 const App = () => (
-  <div>
+  <BrowserRouter>
     <NavBar causes={causes} />
 
-    <RouterProvider router={router} />
-  </div>
+    <Routes>
+      <Route path="/" element={<Home causes={causes} />} />
+
+      <Route path="/charity/:charitySlug" element={<CharityProfile />} />
+    </Routes>
+  </BrowserRouter>
 );
 
 export default App;
