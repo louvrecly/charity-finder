@@ -1,18 +1,22 @@
-import { Charity } from '../models/Charity';
+import { Link } from 'react-router-dom';
+import { CharityOverview } from '../models/Charity';
 
 interface CharityTileProps {
-  charity: Charity;
+  charity: CharityOverview;
 }
 
 const CharityTile = ({ charity }: CharityTileProps) => {
   return (
     <div>
-      <a href={charity.profileUrl}>
+      <Link to={`/charity/${charity.slug}`}>
         <h2>
-          <img src={charity.logoUrl ?? 'https://every.org/favicon-32x32.png'} alt={charity.name} />
+          <img
+            src={charity.logoUrl ?? 'https://every.org/favicon-32x32.png'}
+            alt={charity.name}
+          />
           <span>{charity.name}</span>
         </h2>
-      </a>
+      </Link>
 
       <p>
         Location:{' '}
@@ -37,6 +41,6 @@ const CharityTile = ({ charity }: CharityTileProps) => {
       </ul>
     </div>
   );
-}
+};
 
 export default CharityTile;

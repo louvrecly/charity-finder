@@ -1,5 +1,5 @@
 import { MouseEvent, useEffect, useState } from 'react';
-import { Charity } from '../models/Charity';
+import { CharityOverview } from '../models/Charity';
 import CharitiesList from '../components/CharitiesList';
 import { Cause } from '../data/causes';
 
@@ -11,11 +11,11 @@ interface HomeProps {
 
 const Home = ({ causes = [] }: HomeProps) => {
   const [keyword, setKeyword] = useState('');
-  const [charities, setCharities] = useState<Charity[]>([]);
+  const [charities, setCharities] = useState<CharityOverview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  async function searchByKeyword(cause: Cause) {
+  async function getCharitiesByCause(cause: Cause) {
     const res = await fetch(
       `https://partners.every.org/v0.2/search/${cause}?apiKey=${VITE_API_KEY}`,
     );
@@ -32,12 +32,12 @@ const Home = ({ causes = [] }: HomeProps) => {
     const cause = causes[index];
     setIsLoading(true);
 
-    searchByKeyword(cause)
+    getCharitiesByCause(cause)
       .then((result) => {
         setErrorMessage('');
-        setCharities(result.nonprofits as Charity[]);
+        setCharities((result.nonprofits as CharityOverview[]) ?? []);
       })
-      .catch((err) => setErrorMessage(err))
+      .catch((err) => setErrorMessage(err.message))
       .finally(() => setIsLoading(false));
   }, [causes]);
 
@@ -54,8 +54,7 @@ const Home = ({ causes = [] }: HomeProps) => {
       <div>
         {isLoading
           ? 'Loading...'
-          : errorMessage ||
-          <CharitiesList charities={charities} />}
+          : errorMessage || <CharitiesList charities={charities} />}
       </div>
     </div>
   );

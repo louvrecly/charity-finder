@@ -1,12 +1,14 @@
-import { Charity } from "../models/Charity";
-import CharityTile from "./CharityTile";
+import { CharityOverview } from '../models/Charity';
+import CharityTile from './CharityTile';
 
 interface CharitiesListProps {
-  charities: Charity[];
+  charities: CharityOverview[];
 }
 
 const CharitiesList = ({ charities }: CharitiesListProps) => {
-  return charities.map((charity) => <CharityTile key={charity.slug} charity={charity} />);
-}
+  return charities.map((charity) => (
+    <CharityTile key={charity.slug} charity={charity} />
+  ));
+};
 
 export default CharitiesList;
