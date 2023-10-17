@@ -1,4 +1,5 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { CharityOverview } from '../models/Charity';
 import CharitiesList from '../components/CharitiesList';
 import { Cause } from '../data/causes';
@@ -10,6 +11,8 @@ interface HomeProps {
 }
 
 const Home = ({ causes = [] }: HomeProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [cause, setCause] = useState<Cause | ''>('');
   const [keyword, setKeyword] = useState('');
   const [charities, setCharities] = useState<CharityOverview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,16 +25,38 @@ const Home = ({ causes = [] }: HomeProps) => {
     return res.json();
   }
 
-  const handleInput = (event: MouseEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target as HTMLInputElement;
     setKeyword(value);
   };
 
-  useEffect(() => {
-    const index = Math.floor(Math.random() * causes.length);
-    const cause = causes[index];
-    setIsLoading(true);
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    searchParams.set('cause', keyword);
+    setSearchParams(searchParams);
+  };
 
+  useEffect(() => {
+    const causeQueryValue =
+      searchParams.get('cause')?.toLowerCase().trim() ?? '';
+
+    if (!causeQueryValue) {
+      const index = Math.floor(Math.random() * causes.length);
+      return setCause(causes[index]);
+    }
+
+    if (!causes.includes(causeQueryValue as Cause)) {
+      return setCharities([]);
+    }
+
+    setCause(causeQueryValue as Cause);
+  }, [causes, searchParams]);
+
+  useEffect(() => {
+    if (!cause) return;
+
+    setIsLoading(true);
+    setKeyword(cause);
     getCharitiesByCause(cause)
       .then((result) => {
         setErrorMessage('');
@@ -39,22 +64,32 @@ const Home = ({ causes = [] }: HomeProps) => {
       })
       .catch((err) => setErrorMessage(err.message))
       .finally(() => setIsLoading(false));
-  }, [causes]);
+  }, [cause]);
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Input a cause here"
-        onInput={handleInput}
-      />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Input a cause here"
+          value={keyword}
+          onChange={handleChange}
+        />
+
+        <button type="submit">Search</button>
+      </form>
 
       <p>{keyword}</p>
 
       <div>
         {isLoading
           ? 'Loading...'
-          : errorMessage || <CharitiesList charities={charities} />}
+          : errorMessage ||
+            (charities.length ? (
+              <CharitiesList charities={charities} />
+            ) : (
+              'No matching results found'
+            ))}
       </div>
     </div>
   );

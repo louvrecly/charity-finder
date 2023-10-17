@@ -36,7 +36,9 @@ const CharityTile = ({ charity }: CharityTileProps) => {
       <ul>
         {charity.tags &&
           charity.tags.map((tag) => (
-            <li key={`${charity.slug}-${tag}`}>{tag}</li>
+            <li key={`${charity.slug}-${tag}`}>
+              <Link to={`/?cause=${tag}`}>{tag}</Link>
+            </li>
           ))}
       </ul>
     </div>

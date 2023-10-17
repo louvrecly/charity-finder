@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Cause } from '../data/causes';
 
 interface NavBarProps {
@@ -24,7 +24,7 @@ const NavBar = ({ causes = [] }: NavBarProps) => {
           <div>
             {causes.map((cause) => (
               <li key={cause}>
-                <NavLink to={`/?cause=${cause}`}>{cause}</NavLink>
+                <Link to={`/?cause=${cause}`}>{cause}</Link>
               </li>
             ))}
           </div>
