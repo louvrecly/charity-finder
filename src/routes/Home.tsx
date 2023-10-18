@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { CharityOverview } from '../models/Charity';
 import { SearchResponse } from '../models/EveryOrgResponse';
 import CharitiesList from '../components/CharitiesList';
+import TagsList from '../components/TagsList';
 import { Cause } from '../data/causes';
 
 const { VITE_EVERY_ORG_API, VITE_API_KEY } = import.meta.env;
@@ -15,13 +16,21 @@ const Home = ({ causes = [] }: HomeProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [cause, setCause] = useState<Cause | ''>('');
   const [keyword, setKeyword] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [matchingCauses, setMatchingCauses] = useState<Cause[]>([]);
   const [charities, setCharities] = useState<CharityOverview[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target as HTMLInputElement;
+    const sanitizedKeyword = value.toLowerCase().trim();
+    const matchingCausesWithKeyword = sanitizedKeyword
+      ? causes.filter((cause) => cause.includes(sanitizedKeyword))
+      : [];
+
     setKeyword(value);
+    setMatchingCauses(matchingCausesWithKeyword);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -43,6 +52,7 @@ const Home = ({ causes = [] }: HomeProps) => {
       return setCharities([]);
     }
 
+    setKeyword(causeQueryValue);
     setCause(causeQueryValue as Cause);
   }, [causes, searchParams]);
 
@@ -50,7 +60,6 @@ const Home = ({ causes = [] }: HomeProps) => {
     if (!cause) return;
 
     setIsLoading(true);
-    setKeyword(cause);
 
     fetch(`${VITE_EVERY_ORG_API}/search/${cause}?apiKey=${VITE_API_KEY}`)
       .then((res) => res.json())
@@ -69,8 +78,20 @@ const Home = ({ causes = [] }: HomeProps) => {
           type="text"
           placeholder="Input a cause here"
           value={keyword}
+          onFocus={() => setShowSuggestions(true)}
+          onBlur={() => setShowSuggestions(false)}
           onChange={handleChange}
         />
+
+        {showSuggestions && (
+          <div>
+            {matchingCauses.length ? (
+              <TagsList tags={matchingCauses} />
+            ) : (
+              'No matching causes'
+            )}
+          </div>
+        )}
 
         <button type="submit">Search</button>
       </form>
