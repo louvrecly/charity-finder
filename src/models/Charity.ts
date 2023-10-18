@@ -6,12 +6,15 @@ interface Charity {
   profileUrl: string;
   logoUrl: string;
   coverImageUrl: string;
+  ein: string;
+  logoCloudinaryId: string;
 }
 
 export interface CharityOverview extends Charity {
   slug: string;
   location: string;
   tags?: Cause[];
+  matchedTerms: string[];
 }
 
 export interface CharityDetails extends Charity {
@@ -24,4 +27,16 @@ export interface CharityDetails extends Charity {
     coordinates: [number, number];
   };
   websiteUrl: string;
+  directDisbursement: boolean;
+  hasAdmin: boolean;
+  isDisbursable: boolean;
+  nteeCode: string;
+  nteeCodeMeaning: {
+    centileCode: string;
+    centileMeaning: string;
+    decileCode: string;
+    decileMeaning: string;
+    majorCode: string;
+    majorMeaning: string;
+  };
 }
