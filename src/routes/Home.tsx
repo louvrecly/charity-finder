@@ -3,8 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { CharityOverview } from '../models/Charity';
 import { SearchResponse } from '../models/EveryOrgResponse';
 import CharitiesList from '../components/CharitiesList';
-import TagsList from '../components/TagsList';
-import { Cause } from '../data/causes';
+import CausesList from '../components/CausesList';
+import { Cause } from '../models/Cause';
 
 const { VITE_EVERY_ORG_API, VITE_API_KEY } = import.meta.env;
 
@@ -86,7 +86,7 @@ const Home = ({ causes = [] }: HomeProps) => {
         {showSuggestions && (
           <div>
             {matchingCauses.length ? (
-              <TagsList tags={matchingCauses} />
+              <CausesList causes={matchingCauses} />
             ) : (
               'No matching causes'
             )}

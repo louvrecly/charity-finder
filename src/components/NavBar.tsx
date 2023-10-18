@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Cause } from '../data/causes';
+import { Cause } from '../models/Cause';
 
 interface NavBarProps {
   causes: Cause[];

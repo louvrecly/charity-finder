@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CharityDetails } from '../models/Charity';
-import { Tag, TagDetails } from '../models/Tag';
+import { Cause, CauseDetails } from '../models/Cause';
 import { GetResponse } from '../models/EveryOrgResponse';
 import ProfileTitle from '../components/ProfileTitle';
 import LocationBlock from '../components/LocationBlock';
-import TagsList from '../components/TagsList';
+import CausesList from '../components/CausesList';
 
 const { VITE_EVERY_ORG_API, VITE_API_KEY } = import.meta.env;
 
@@ -15,7 +15,7 @@ type CharityProfileParams = {
 
 const CharityProfile = () => {
   const [charity, setCharity] = useState<CharityDetails | null>(null);
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [causes, setCauses] = useState<Cause[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const { charitySlug } = useParams<CharityProfileParams>();
@@ -36,8 +36,8 @@ const CharityProfile = () => {
         setErrorMessage('');
         setCharity(data.nonprofit);
 
-        setTags(
-          data.nonprofitTags?.map((tag: TagDetails) => tag.tagName) || [],
+        setCauses(
+          data.nonprofitTags?.map((cause: CauseDetails) => cause.tagName) || [],
         );
       })
       .catch((err) => setErrorMessage(err.message))
@@ -68,7 +68,7 @@ const CharityProfile = () => {
 
               <p>{charity.descriptionLong || charity.description}</p>
 
-              <TagsList tags={tags} />
+              <CausesList causes={causes} />
             </div>
           ))}
     </div>

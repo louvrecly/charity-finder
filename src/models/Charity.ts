@@ -1,3 +1,5 @@
+import { Cause } from './Cause';
+
 interface Charity {
   name: string;
   description: string;
@@ -9,7 +11,7 @@ interface Charity {
 export interface CharityOverview extends Charity {
   slug: string;
   location: string;
-  tags?: string[];
+  tags?: Cause[];
 }
 
 export interface CharityDetails extends Charity {

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { CharityOverview } from '../models/Charity';
 import ProfileTitle from './ProfileTitle';
 import LocationBlock from './LocationBlock';
-import TagsList from './TagsList';
+import CausesList from './CausesList';
 
 interface CharityTileProps {
   charity: CharityOverview;
@@ -18,7 +18,7 @@ const CharityTile = ({ charity }: CharityTileProps) => (
 
     <p>{charity.description}</p>
 
-    <TagsList tags={charity.tags} />
+    <CausesList causes={charity.tags} />
   </div>
 );
 

@@ -1,5 +1,5 @@
 import { CharityDetails, CharityOverview } from './Charity';
-import { TagDetails } from './Tag';
+import { CauseDetails } from './Cause';
 
 export type SearchResponse = {
   nonprofits: CharityOverview[];
@@ -7,7 +7,7 @@ export type SearchResponse = {
 
 type GetResponseData = {
   nonprofit: CharityDetails;
-  nonprofitTags?: TagDetails[];
+  nonprofitTags?: CauseDetails[];
 };
 
 export type GetResponse = {

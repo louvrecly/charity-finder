@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Home from './routes/Home';
 import CharityProfile from './routes/CharityProfile';
-import { ALL_CAUSES } from './data/causes';
+import { ALL_CAUSES } from './models/Cause';
 
 const causes = [...ALL_CAUSES];
 

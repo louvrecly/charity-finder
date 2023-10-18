@@ -68,3 +68,13 @@ export const ALL_CAUSES = [
 ] as const;
 
 export type Cause = (typeof ALL_CAUSES)[number];
+
+export interface CauseDetails {
+  id: string;
+  tagName: Cause;
+  title: string;
+  causeCategory: string;
+  tagImageCloudinaryId: string;
+  tagImageUrl: string;
+  tagUrl: string;
+}
