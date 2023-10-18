@@ -80,12 +80,12 @@ const Home = ({ causes = [] }: HomeProps) => {
       <div>
         {isLoading
           ? 'Loading...'
-          : errorMessage ||
-            (charities.length ? (
-              <CharitiesList charities={charities} />
-            ) : (
-              'No matching responses found'
-            ))}
+          : errorMessage || (
+              <CharitiesList
+                charities={charities}
+                fallbackMessage={`No matching results found for the keyword "${keyword}"`}
+              />
+            )}
       </div>
     </div>
   );
