@@ -7,7 +7,7 @@ interface CausePillProps {
 
 const CausePill = ({ cause }: CausePillProps) => {
   return (
-    <li>
+    <li className="u-text-start">
       <Link to={`/?cause=${cause}`}>{cause}</Link>
     </li>
   );

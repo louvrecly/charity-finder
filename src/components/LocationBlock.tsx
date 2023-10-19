@@ -10,7 +10,7 @@ const LocationBlock = ({ location, coordinates }: LocationBlockProps) => {
   const locationLink = `https://www.google.com/maps/search/?api=1&query=${query}`;
 
   return (
-    <p>
+    <p className="u-my-2 u-text-sm">
       Location:{' '}
       <a href={locationLink} target="_blank" rel="noopener noreferrer">
         {location}

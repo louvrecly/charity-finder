@@ -72,31 +72,39 @@ const Home = ({ causes = [] }: HomeProps) => {
   }, [cause]);
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Input a cause here"
-          value={keyword}
-          onFocus={() => setShowSuggestions(true)}
-          onBlur={() => setShowSuggestions(false)}
-          onChange={handleChange}
-        />
+    <div className="u-py-2 u-px-8">
+      <form className="u-mb-2 u-flex u-items-stretch" onSubmit={handleSubmit}>
+        <div className="u-relative u-flex-1">
+          <input
+            className="u-py-1 u-px-4 u-w-full u-h-full u-rounded-l-full"
+            type="text"
+            placeholder="Input a cause here"
+            value={keyword}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => setShowSuggestions(false)}
+            onChange={handleChange}
+          />
 
-        {showSuggestions && (
-          <div>
-            {matchingCauses.length ? (
-              <CausesList causes={matchingCauses} />
-            ) : (
-              'No matching causes'
-            )}
-          </div>
-        )}
+          {showSuggestions && (
+            <div className="u-py-2 u-px-8 u-absolute u-top-full u-left-4 u-right-0 u-bg-zinc-950/70 u-rounded-b-xl">
+              {matchingCauses.length ? (
+                <CausesList causes={matchingCauses} />
+              ) : keyword.length ? (
+                'No matching causes'
+              ) : (
+                'Try typing something'
+              )}
+            </div>
+          )}
+        </div>
 
-        <button type="submit">Search</button>
+        <button
+          className="u-py-1 u-bg-blue-900 u-rounded-l-none u-rounded-r-full hover:u-bg-blue-800"
+          type="submit"
+        >
+          Search
+        </button>
       </form>
-
-      <p>{keyword}</p>
 
       <div>
         {isLoading
