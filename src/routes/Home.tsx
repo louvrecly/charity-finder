@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import { CharityOverview } from '../models/Charity';
 import { SearchResponse } from '../models/EveryOrgResponse';
 import CharitiesList from '../components/CharitiesList';
-import CausesList from '../components/CausesList';
 import { Cause } from '../models/Cause';
 
 const { VITE_EVERY_ORG_API, VITE_API_KEY } = import.meta.env;
@@ -31,6 +30,12 @@ const Home = ({ causes = [] }: HomeProps) => {
 
     setKeyword(value);
     setMatchingCauses(matchingCausesWithKeyword);
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 300);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -81,19 +86,25 @@ const Home = ({ causes = [] }: HomeProps) => {
             placeholder="Input a cause here"
             value={keyword}
             onFocus={() => setShowSuggestions(true)}
-            onBlur={() => setShowSuggestions(false)}
+            onBlur={handleBlur}
             onChange={handleChange}
           />
 
           {showSuggestions && (
             <div className="u-py-2 u-px-8 u-absolute u-top-full u-left-4 u-right-0 u-bg-zinc-950/70 u-rounded-b-xl">
-              {matchingCauses.length ? (
-                <CausesList causes={matchingCauses} />
-              ) : keyword.length ? (
-                'No matching causes'
-              ) : (
-                'Try typing something'
-              )}
+              {matchingCauses.length
+                ? matchingCauses.map((cause) => (
+                    <div
+                      className="u-cursor-pointer"
+                      key={cause}
+                      onClick={() => setKeyword(cause)}
+                    >
+                      {cause}
+                    </div>
+                  ))
+                : keyword.length
+                ? 'No matching causes'
+                : 'Try typing something'}
             </div>
           )}
         </div>
