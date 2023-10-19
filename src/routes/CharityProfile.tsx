@@ -51,24 +51,32 @@ const CharityProfile = () => {
         : errorMessage ||
           (charity && (
             <div>
-              <img src={charity.coverImageUrl} alt={charity.name} />
-
-              <a
-                href={charity.websiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <ProfileTitle name={charity.name} logoUrl={charity.logoUrl} />
-              </a>
-
-              <LocationBlock
-                location={charity.locationAddress}
-                coordinates={charity.locationLatLng?.coordinates}
+              <img
+                className="u-w-full u-h-auto"
+                src={charity.coverImageUrl}
+                alt={charity.name}
               />
 
-              <p>{charity.descriptionLong || charity.description}</p>
+              <div className="u-py-2 u-px-8">
+                <a
+                  href={charity.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ProfileTitle name={charity.name} logoUrl={charity.logoUrl} />
+                </a>
 
-              <CausesList causes={causes} />
+                <LocationBlock
+                  location={charity.locationAddress}
+                  coordinates={charity.locationLatLng?.coordinates}
+                />
+
+                <p className="u-text-sm">
+                  {charity.descriptionLong || charity.description}
+                </p>
+
+                <CausesList causes={causes} />
+              </div>
             </div>
           ))}
     </div>
